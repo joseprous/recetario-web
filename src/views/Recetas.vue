@@ -45,7 +45,7 @@
               </v-flex>
               <v-container grid-list-md>
                 <v-layout wrap>
-                  <v-container grid-list-md xs12 v-for="(ingrediente, index) in dialog.receta.ingredientes">
+                  <v-container grid-list-md xs12 v-for="(ingrediente, index) in dialog.receta.ingredientes" :key="index">
                     <v-layout wrap>
                       <v-flex xs12 sm6 md3>
                         <v-text-field label="Nombre*" required v-model="ingrediente.nombre"></v-text-field>
@@ -73,7 +73,7 @@
               </v-flex>
               <v-container grid-list-md>
                 <v-layout wrap>
-                  <v-container grid-list-md xs12 v-for="(paso, index) in dialog.receta.pasos">
+                  <v-container grid-list-md xs12 v-for="(paso, index) in dialog.receta.pasos" :key="index">
                     <v-layout wrap>
                       <v-flex xs2>
                         {{ paso.numero }}
@@ -143,11 +143,11 @@ export default {
                 }
             })
                 .then(response => {
-                    console.log(response);
+                    //console.log(response);
                     this.dialog.loading = false
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    //console.log(error);
                 });
         },
         filtrar (val, search) {
