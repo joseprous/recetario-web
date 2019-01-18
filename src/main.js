@@ -7,6 +7,8 @@ import { store } from './store.js'
 Vue.config.productionTip = false
 Vue.use(Vuetify)
 
+require('vuetify/dist/vuetify.min.css')
+
 new Vue({
     render: h => h(App),
     router,
