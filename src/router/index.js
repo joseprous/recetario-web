@@ -9,7 +9,7 @@ const router = new Router({
     mode: 'history',
     routes: [
         {
-            path: '/recetas',
+            path: '/',
             name: 'recetas',
             component: Recetas
         },
