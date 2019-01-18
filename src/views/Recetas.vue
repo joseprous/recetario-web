@@ -38,8 +38,62 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12>
-                <v-text-field v-model="dialog.nombre" label="Nombre" required></v-text-field>
+                <v-text-field v-model="dialog.receta.nombre" label="Nombre*" required></v-text-field>
               </v-flex>
+              <v-flex xs12>
+                Ingredientes
+              </v-flex>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-container grid-list-md xs12 v-for="(ingrediente, index) in dialog.receta.ingredientes">
+                    <v-layout wrap>
+                      <v-flex xs12 sm6 md3>
+                        <v-text-field label="Nombre*" required v-model="ingrediente.nombre"></v-text-field>
+                      </v-flex>
+                      <v-flex xs12 sm6 md3>
+                        <v-text-field label="Cantidad*" required v-model="ingrediente.cantidad"></v-text-field>
+                      </v-flex>
+                      <v-flex xs12 sm6 md3>
+                        <v-text-field label="Unidad*" required v-model="ingrediente.unidad"></v-text-field>
+                      </v-flex>
+                      <v-flex xs12 sm6 md3>
+                        <v-btn fab dark small color="primary" @click="removeIngrediente(index)">
+                          <v-icon dark>remove</v-icon>
+                        </v-btn>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                </v-layout>
+                <v-btn small fab dark color="indigo" @click="addIngrediente">
+                  <v-icon dark>add</v-icon>
+                </v-btn>
+              </v-container>
+              <v-flex xs12>
+                Pasos
+              </v-flex>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-container grid-list-md xs12 v-for="(paso, index) in dialog.receta.pasos">
+                    <v-layout wrap>
+                      <v-flex xs2>
+                        {{ paso.numero }}
+                        <!-- <v-text-field label="Numero*" required v-model="paso.numero"></v-text-field> -->
+                      </v-flex>
+                      <v-flex xs8>
+                        <v-text-field label="Texto*" required v-model="paso.texto"></v-text-field>
+                      </v-flex>
+                      <v-flex xs2 >
+                        <v-btn fab dark small color="primary" @click="removePaso(index)">
+                          <v-icon dark>remove</v-icon>
+                        </v-btn>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                </v-layout>
+                <v-btn small fab dark color="indigo" @click="addPaso">
+                  <v-icon dark>add</v-icon>
+                </v-btn>
+              </v-container>
             </v-layout>
           </v-container>
           <small>*indica campos obligatorios</small>
@@ -72,20 +126,58 @@ export default {
             dialog: {
                 enabled: false,
                 loading: false,
-                nombre: ''
+                receta: {
+                    nombre: '',
+                    ingredientes: [],
+                    pasos: []
+                }
             }
         }
     },
     methods: {
         agregarReceta () {
             this.dialog.loading = true
+            axios.post('https://recetario-back.herokuapp.com/api/v0/recetas',this.dialog.receta,  {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+                .then(response => {
+                    console.log(response);
+                    this.dialog.loading = false
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         },
         filtrar (val, search) {
             return val.toLowerCase().includes(search.toLowerCase())
-        }
+        },
+        addIngrediente: function() {
+            this.dialog.receta.ingredientes.push({
+                nombre: "",
+                cantidad: "",
+                unidad: ""
+            });
+        },
+        removeIngrediente: function(index) {
+            this.dialog.receta.ingredientes.splice(index, 1);
+        },
+        addPaso: function() {
+            this.dialog.receta.pasos.push({
+                numero: this.dialog.receta.pasos.length+1,
+                texto: ""
+            });
+        },
+        removePaso: function(index) {
+            this.dialog.receta.pasos.splice(index, 1);
+            for(var i = 0; i < this.dialog.receta.pasos.length; i++){
+                this.dialog.receta.pasos[i].numero = i+1;
+            }
+        },
     },
     created: function () {
-        axios.get(' https://recetario-back.herokuapp.com/api/v0/recetas').then(response => (this.recetas = response.data))
+        axios.get('https://recetario-back.herokuapp.com/api/v0/recetas').then(response => (this.recetas = response.data))
     }
 }
 </script>
