@@ -51,7 +51,7 @@
                         <v-text-field label="Nombre*" required v-model="ingrediente.nombre"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6 md3>
-                        <v-text-field label="Cantidad*" required v-model="ingrediente.cantidad"></v-text-field>
+                        <v-text-field label="Cantidad*" required v-model.number="ingrediente.cantidad"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6 md3>
                         <v-text-field label="Unidad*" required v-model="ingrediente.unidad"></v-text-field>
