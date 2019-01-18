@@ -25,7 +25,7 @@
         small
         absolute
         botton
-        right
+        left
         fab
         >
         <v-icon>add</v-icon>
